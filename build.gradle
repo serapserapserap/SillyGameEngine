@@ -1,0 +1,108 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.0'
+}
+
+group = 'serap'
+version = '1.0-SNAPSHOT'
+
+
+
+import org.gradle.internal.os.OperatingSystem
+
+switch (OperatingSystem.current()) {
+    case OperatingSystem.LINUX:
+        project.ext.lwjglNatives = "natives-linux"
+        def osArch = System.getProperty("os.arch")
+        if (osArch.startsWith("arm") || osArch.startsWith("aarch64")) {
+            project.ext.lwjglNatives += osArch.contains("64") || osArch.startsWith("armv8") ? "-arm64" : "-arm32"
+        } else if  (osArch.startsWith("ppc")) {
+            project.ext.lwjglNatives += "-ppc64le"
+        } else if  (osArch.startsWith("riscv")) {
+            project.ext.lwjglNatives += "-riscv64"
+        }
+        break
+    case OperatingSystem.MAC_OS:
+        project.ext.lwjglNatives = System.getProperty("os.arch").startsWith("aarch64") ? "natives-macos-arm64" : "natives-macos"
+        break
+    case OperatingSystem.WINDOWS:
+        def osArch = System.getProperty("os.arch")
+        project.ext.lwjglNatives = osArch.contains("64")
+                ? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
+                : "natives-windows-x86"
+        break
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://jitpack.io' }
+}
+
+dependencies {
+    //kotlin & lombok
+    implementation 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    //discord rpc bindings
+    implementation "com.github.Vatuu:discord-rpc:1.6.2"
+
+    implementation 'org.tinylog:tinylog-api:2.7.0'
+    implementation 'org.tinylog:tinylog-impl:2.7.0'
+
+    //lwjgl
+    implementation platform("org.lwjgl:lwjgl-bom:3.3.6")
+
+    implementation "org.lwjgl:lwjgl"
+    implementation "org.lwjgl:lwjgl-glfw"
+    implementation "org.lwjgl:lwjgl-opengl"
+    implementation "org.lwjgl:lwjgl-openal"
+
+    runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
+    if (lwjglNatives == "natives-macos" || lwjglNatives == "natives-macos-arm64") runtimeOnly "org.lwjgl:lwjgl-vulkan::$lwjglNatives"
+
+    implementation "com.code-disaster.steamworks4j:steamworks4j-server:1.9.0"
+    implementation "com.code-disaster.steamworks4j:steamworks4j:1.9.0"
+    implementation "org.lwjglx:lwjgl3-awt:0.1.8"
+    implementation "org.joml:joml-primitives:1.10.0"
+    implementation "org.joml:joml:1.10.7"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'serap.Main'
+    }
+    dependencies {
+        include(dependency('org.projectlombok:lombok:1.18.30'))
+        include(dependency('org.projectlombok:lombok:1.18.30'))
+        include(dependency("com.github.Vatuu:discord-rpc:1.6.2"))
+
+        include(dependency('org.tinylog:tinylog-api:2.7.0'))
+        include(dependency('org.tinylog:tinylog-impl:2.7.0'))
+
+        include(dependency("org.lwjgl:lwjgl-bom:3.3.6"))
+
+        include(dependency("org.lwjgl:lwjgl"))
+        include(dependency("org.lwjgl:lwjgl-glfw"))
+        include(dependency("org.lwjgl:lwjgl-opengl"))
+        include(dependency("org.lwjgl:lwjgl-openal"))
+
+        include(dependency("org.lwjgl:lwjgl::$lwjglNatives"))
+        include(dependency("org.lwjgl:lwjgl-glfw::$lwjglNatives"))
+        include(dependency("org.lwjgl:lwjgl-opengl::$lwjglNatives"))
+        include(dependency("org.lwjgl:lwjgl-openal::$lwjglNatives"))
+        if (lwjglNatives == "natives-macos" || lwjglNatives == "natives-macos-arm64") include(dependency( "org.lwjgl:lwjgl-vulkan::$lwjglNatives"))
+
+        include(dependency("com.code-disaster.steamworks4j:steamworks4j-server:1.9.0"))
+        include(dependency("com.code-disaster.steamworks4j:steamworks4j:1.9.0"))
+        include(dependency("org.lwjglx:lwjgl3-awt:0.1.8"))
+        include(dependency("org.joml:joml-primitives:1.10.0"))
+        include(dependency("org.joml:joml:1.10.7"))
+    }
+}
