@@ -12,4 +12,13 @@ public interface IntegerIdentifiable extends AutoCloseable {
     default boolean is(@NotNull IntegerIdentifiable other) {
         return this.getIdentifier() == other.getIdentifier();
     }
+    default boolean is(@NotNull LongIdentifiable other) {
+        return this.getIdentifier() == other.getIdentifier();
+    }
+    default boolean is(long id) {
+        return this.getIdentifier() == id;
+    }
+    default boolean is(int id) {
+        return this.getIdentifier() == id;
+    }
 }

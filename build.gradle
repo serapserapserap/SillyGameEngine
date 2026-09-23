@@ -68,6 +68,7 @@ dependencies {
     implementation "org.lwjglx:lwjgl3-awt:0.1.8"
     implementation "org.joml:joml-primitives:1.10.0"
     implementation "org.joml:joml:1.10.7"
+    implementation "it.unimi.dsi:fastutil:8.5.19"
 }
 
 test {
@@ -104,5 +105,6 @@ shadowJar {
         include(dependency("org.lwjglx:lwjgl3-awt:0.1.8"))
         include(dependency("org.joml:joml-primitives:1.10.0"))
         include(dependency("org.joml:joml:1.10.7"))
+        include(dependency("it.unimi.dsi:fastutil:8.5.19"))
     }
 }
