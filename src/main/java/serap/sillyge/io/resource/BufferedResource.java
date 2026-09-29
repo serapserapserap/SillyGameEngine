@@ -1,31 +1,36 @@
 package serap.sillyge.io.resource;
 
+import org.jetbrains.annotations.NotNull;
+import serap.sillyge.core.Managers;
 import serap.sillyge.core.Pointer;
+
+import java.util.Objects;
 
 public class BufferedResource<T> implements Pointer<T> {
 
     protected T primary;
     protected T fallback;
     protected ResourceType type;
-    protected String path;
+    protected ResourceIdentifier identifier;
 
-    public static <T> BufferedResource<T> of(String path) {
-        ResourceType type = ResourceType.extrapolateFromPathString(path);
-        return new 
+    @SuppressWarnings("unchecked")
+    public static <T> BufferedResource<T> of(@NotNull ResourceIdentifier identifier) {
+        ResourceType type = ResourceType.extrapolateFromPathString(identifier.getIdentifier());
+        return new BufferedResource<>(
+                Managers.getResourceManager(),
+                identifier,
+                type,
+                (T) ResourceType.getFallback(type)
+        );
     }
 
-    private BufferedResource(ResourceManager resourceManager, String path, ResourceType type, T initialFallback) {
-        this.path = path;
+    private BufferedResource(@NotNull ResourceRegistry resourceRegistry, @NotNull ResourceIdentifier resourceIdentifier, @NotNull ResourceType type, @NotNull T initialFallback) {
+        this.identifier = resourceIdentifier;
         this.fallback = initialFallback;
     }
 
     @Override
     public T get() {
-        return null;
-    }
-
-    @Override
-    public void set(T value) {
-        throw new IllegalStateException("BufferedResource can only be modified by changing it's resource location");
+        return Objects.requireNonNullElse(this.primary, this.fallback);
     }
 }

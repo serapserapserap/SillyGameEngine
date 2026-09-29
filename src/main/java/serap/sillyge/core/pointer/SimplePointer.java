@@ -4,7 +4,7 @@ import serap.sillyge.core.Pointer;
 
 import java.util.concurrent.ExecutionException;
 
-public class SimplePointer<T> implements Pointer<T> {
+public class SimplePointer<T> implements MutablePointer<T> {
 
     protected T value;
 

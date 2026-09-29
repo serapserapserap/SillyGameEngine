@@ -16,26 +16,15 @@ public class Shader implements IntegerIdentifiable {
     private final OpenGL.ShaderType type;
     @Setter
     private String source;
-    @Getter
-    @Setter
-    private int subroutineUniforms;
 
-    public boolean shouldQuerySubroutineUniforms() {
-        return this.subroutineUniforms == -1;
-    }
 
     public Shader(@NotNull OpenGL.ShaderType type) {
-        this(type, null, 0);
+        this(type, null);
     }
 
     public Shader(@NotNull OpenGL.ShaderType type, @Nullable String source) {
-        this(type, source, 0);
-    }
-
-    public Shader(@NotNull OpenGL.ShaderType type, @Nullable String source, int subroutineUniforms) {
         this.type = type;
         this.source = source;
-        this.subroutineUniforms = subroutineUniforms;
     }
 
     public void createShader(@NotNull String source, boolean discardSource) {

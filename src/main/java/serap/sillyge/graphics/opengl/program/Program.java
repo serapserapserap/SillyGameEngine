@@ -10,6 +10,7 @@ import serap.sillyge.graphics.exception.GLException;
 import serap.sillyge.graphics.opengl.IntegerIdentifiable;
 import serap.sillyge.graphics.opengl.OpenGL;
 import serap.sillyge.graphics.opengl.program.shader.Shader;
+import serap.sillyge.graphics.opengl.program.uniform.UniformLocation;
 import serap.sillyge.io.ResourceUtils;
 
 import java.nio.FloatBuffer;
@@ -31,8 +32,8 @@ public abstract class Program implements IntegerIdentifiable {
             String vertexSrc = Files.readString(ResourceUtils.getResourceAsPath(path + "/vertex.vsh"));
             String fragmentSrc = Files.readString(ResourceUtils.getResourceAsPath(path + "/fragment.fsh"));
 
-            Shader vertexShader = new Shader(GL.Shader.VERTEX, vertexSrc);
-            Shader fragmentShader = new Shader(GL.Shader.FRAGMENT, fragmentSrc);
+            Shader vertexShader = new Shader(OpenGL.ShaderType.VERTEX, vertexSrc);
+            Shader fragmentShader = new Shader(OpenGL.ShaderType.FRAGMENT, fragmentSrc);
 
             vertexShader.init();
             fragmentShader.init();
@@ -214,7 +215,7 @@ public abstract class Program implements IntegerIdentifiable {
     public abstract void discardShaders();
 
     @Override
-    public void deallocate() {
+    public void close() {
 
         if(this.shadersAllocated) {
             this.shadersAllocated = false;

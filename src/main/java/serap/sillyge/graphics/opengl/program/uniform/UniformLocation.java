@@ -1,14 +1,14 @@
 package serap.sillyge.graphics.opengl.program.uniform;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.NotNull;
 import serap.sillyge.core.Pointer;
 import serap.sillyge.graphics.opengl.program.Program;
 
-import java.util.HashSet;
 import java.util.function.Supplier;
 
 public final class UniformLocation {
-    private final static HashSet<UniformLocation> uniformLocations = new HashSet<>();
+    private final static ObjectArrayList<UniformLocation> uniformLocations = new ObjectArrayList<>();
 
     public static void refreshLocations() {
         for (UniformLocation uniformLocation : UniformLocation.uniformLocations) {

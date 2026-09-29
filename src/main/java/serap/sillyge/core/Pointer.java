@@ -4,7 +4,6 @@ import java.util.concurrent.ExecutionException;
 
 public interface Pointer<T> {
     T get();
-    void set(T value);
 
     static <T> Pointer<T> newPointer() {
         return null;

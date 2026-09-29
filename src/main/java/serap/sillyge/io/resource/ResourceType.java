@@ -1,6 +1,5 @@
 package serap.sillyge.io.resource;
 
-import org.jetbrains.annotations.NotNull;
 
 public enum ResourceType {
     TEXTURE("png"),
@@ -12,7 +11,15 @@ public enum ResourceType {
         this.targetFileExtension = targetFileExtension;
     }
 
-    @NotNull
+    /*
+     * todo -> provide actual fallbacks for all resource type cases
+     *  the goal of the fallback system is so that if something fails to load it won't nullpointer, it will just log an error
+     * and render using a fallback texture
+     */
+    public static Object getFallback(ResourceType type) {
+        return null;
+    }
+
     public static ResourceType extrapolateFromPathString(String pathString) {
         int lastDotIndex = pathString.lastIndexOf('.');
         String extension = pathString.substring(lastDotIndex + 1).toLowerCase();
