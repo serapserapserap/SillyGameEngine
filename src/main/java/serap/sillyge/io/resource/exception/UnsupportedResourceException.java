@@ -1,4 +1,4 @@
-package serap.sillyge.io.resource;
+package serap.sillyge.io.resource.exception;
 
 public final class UnsupportedResourceException extends RuntimeException {
     public UnsupportedResourceException(String string) {

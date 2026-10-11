@@ -1,6 +1,11 @@
 package serap.sillyge.io.resource;
 
+import org.jetbrains.annotations.NotNull;
 import serap.sillyge.SillyGameEngine;
+import serap.sillyge.io.resource.type.Extension;
+
+import java.io.File;
+import java.nio.file.Path;
 
 public class ResourceIdentifier {
 
@@ -8,8 +13,8 @@ public class ResourceIdentifier {
         return new ResourceIdentifier(SillyGameEngine.ENGINE_NAME_SHORT, identifier);
     }
 
-    public String resourceNamespace;
-    public String resourceIdentifier;
+    private final String resourceNamespace;
+    private final String resourceIdentifier;
 
     public String getNamespacedIdentifier() {
         return String.format("%s::%s", this.resourceNamespace, this.resourceIdentifier);
@@ -17,7 +22,7 @@ public class ResourceIdentifier {
 
     public ResourceIdentifier(String namespace, String identifier) {
         this.resourceNamespace = namespace;
-        this.resourceIdentifier = identifier;
+        this.resourceIdentifier = identifier.toLowerCase();
     }
 
     public String getIdentifier() {
@@ -37,6 +42,36 @@ public class ResourceIdentifier {
         }
 
         return false;
+    }
+
+    public String toClasspathString() {
+        return this.getIdentifier().replace(".", "/");
+    }
+
+    public String toClasspathString(@NotNull Extension ext) {
+        return this.toClasspathString() + "." + ext.getExtension();
+    }
+
+    public String toPathString() {
+        return this.getIdentifier().replace(".", File.pathSeparator);
+    }
+
+    public String toPathString(@NotNull Extension ext) {
+        return this.toPathString() + "." + ext.getExtension();
+    }
+
+    public Path asPath(Path source) {
+        String[] subPaths = this.getIdentifier().split(".");
+
+        for (String subPath : subPaths) {
+            source = source.resolve(subPath);
+        }
+
+        return source;
+    }
+
+    public Path asPath(Path source, @NotNull Extension extension) {
+        return this.asPath(source).resolve(extension.getExtension());
     }
 
     @Override

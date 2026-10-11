@@ -14,7 +14,7 @@ public class SimplePointer<T> implements MutablePointer<T> {
     }
 
     @Override
-    public void set(T value) {
+    public void pointTo(T value) {
         this.value = value;
     }
 }

@@ -1,5 +1,7 @@
 package serap.sillyge.io;
 
+import serap.sillyge.io.resource.ResourceIdentifier;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -22,5 +24,9 @@ public final class ResourceUtils {
             throw new RuntimeException(new FileNotFoundException("Failed to get uri for path " + path));
         }
         return Paths.get(resource.toURI());
+    }
+
+    public static String[] getPathFromIdentifier(ResourceIdentifier identifier) {
+        return identifier.getIdentifier().split(".");
     }
 }

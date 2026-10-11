@@ -1,7 +1,7 @@
 package serap.sillyge.io.resource;
 
 import serap.sillyge.core.Registry;
-import serap.sillyge.graphics.opengl.program.Program;
+import serap.sillyge.io.resource.type.ResourceType;
 
 /**
  * how to do resources
@@ -13,15 +13,20 @@ import serap.sillyge.graphics.opengl.program.Program;
  * (unless i make an engine error or the type is something that cannot have an initial fallback associated with it (like a shader))
  */
 public class ResourceRegistry {
-    public static Registry.Mutable<Program, FallbackResource<Program>> SHADER_REGISTRY;
+    /*public static Registry.Mutable<Program, Resource<Program>> SHADER_REGISTRY = Registry.newMutableRegistry(
+            "resource::shader",
+            () -> new Resource<>(
+            null
+            )
+    );*/
+
+    public static Registry<ResourceType> TYPE_REGISTRY = Registry.newRegistry("resource::type");
+
+
+
 
     public ResourceRegistry() {
-        SHADER_REGISTRY = Registry.newMutableRegistry(
-                "resource::shader",
-                () -> new FallbackResource<>(
-                        null
-                )
-        );
+
     }
 
 

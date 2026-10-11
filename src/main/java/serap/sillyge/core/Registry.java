@@ -4,8 +4,10 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import serap.sillyge.core.pointer.MutablePointer;
 import serap.sillyge.io.resource.ResourceIdentifier;
 
+import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
@@ -58,6 +60,10 @@ public class Registry<T> {
 
     public boolean isLocked() {
         return this.writable;
+    }
+
+    public void deposit(T resource, ResourceIdentifier identifier) {
+
     }
 
     @Getter
@@ -154,11 +160,21 @@ public class Registry<T> {
         }
     }
 
-    public static abstract class Mutable<T, P extends Pointer<T>> extends Registry<P> {
+    public static abstract class Mutable<T, P extends MutablePointer<T>> extends Registry<P> {
         public abstract P register(ResourceIdentifier identifier);
 
         public Mutable(String tag) {
             super(tag);
+        }
+
+        public void deposit(ResourceIdentifier identifier, T object) {
+            P pointer = this.get(identifier);
+
+            if(pointer == null) {
+                throw new NullPointerException("Cannot deposit object as there is no pointer registered to the identifier " + identifier.getNamespacedIdentifier());
+            }
+
+            pointer.pointTo(object);
         }
     }
 }
